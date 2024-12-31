@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='survey.js') }}" defer></script>
+</head>
+<body>
+    <h1>Survey Form</h1>
+    <form action="/submit" method="post">
+
+        <!-- 1. RD Name -->
+        <label for="rd_name">RD Name:</label>
+        <input type="text" id="rd_name" name="rd_name" required><br>
+
+        <!-- 2. Date Seen -->
+        <label for="date_seen">Date Seen:</label>
+        <input type="date" id="date_seen" name="date_seen" required><br>
+
+        <!-- 3. MRN Patient -->
+        <label for="mrn_patient">MRN Patient:</label>
+        <input type="text" id="mrn_patient" name="mrn_patient" pattern="[0-9]*" required><br>
+
+        <!-- 4. Reason for Visit -->
+        <label>Reason for Visit:</label>
+        <div>
+            <input type="radio" name="reason_for_visit" value="Initial assessment" required> Initial Assessment<br>
+            <input type="radio" name="reason_for_visit" value="Reassessment"> Reassessment<br>
+            <input type="radio" name="reason_for_visit" value="Calorie count (non-consult)"> Calorie Count (non-consult)<br>
+            <input type="radio" name="reason_for_visit" value="Meal plan"> Meal Plan<br>
+            <input type="radio" name="reason_for_visit" value="Brief note"> Brief Note<br>
+            <input type="radio" name="reason_for_visit" value="Daily PN note (non-consult)"> Daily PN Note (non-consult)
+        </div><br>
+
+        <!-- Conditional Sections Start Here -->
+        
+        <!-- 5. INA Reason -->
+        <div id="ina_reason_section" style="display:none;">
+            <label>INA Reason:</label>
+            <div>
+                <input type="radio" name="ina_reason" value="EN/PN (Not RN referral)"> EN/PN (Not RN referral)<br>
+                <input type="radio" name="ina_reason" value="ICU/Transplant"> ICU/Transplant<br>
+                <input type="radio" name="ina_reason" value="Length of Stay"> Length of Stay<br>
+                <input type="radio" name="ina_reason" value="Consult"> Consult<br>
+                <input type="radio" name="ina_reason" value="RN Referral"> RN Referral<br>
+                <input type="radio" name="ina_reason" value="Braden Score <=12"> Braden Score <=12
+            </div><br>
+        </div>
+
+        <!-- 6. RA Reason -->
+        <div id="ra_reason_section" style="display:none;">
+            <label>RA Reason:</label>
+            <div>
+                <input type="radio" name="ra_reason" value="Due date"> Due date<br>
+                <input type="radio" name="ra_reason" value="Consult"> Consult<br>
+                <input type="radio" name="ra_reason" value="RN Referral"> RN Referral<br>
+                <input type="radio" name="ra_reason" value="Calorie Count (non-consult)"> Calorie Count (non-consult)
+            </div><br>
+        </div>
+
+        <!-- 7. Outcome Risk -->
+        <label>Outcome Risk:</label>
+        <div>
+            <input type="radio" name="outcome_risk" value="Low Risk"> Low Risk<br>
+            <input type="radio" name="outcome_risk" value="Medium Risk"> Medium Risk<br>
+            <input type="radio" name="outcome_risk" value="High Risk"> High Risk<br>
+            <input type="radio" name="outcome_risk" value="Hospice"> Hospice
+        </div><br>
+
+<!-- 8. INA Timeliness -->
+<div id="ina_timeliness_section" style="display:none;">
+    <label>INA Timeliness:</label>
+    <div>
+        <input type="radio" name="ina_timeliness" value="Yes"> Yes<br>
+        <input type="radio" name="ina_timeliness" value="No"> No
+    </div><br>
+</div>
+
+<!-- 9. INA Late Reason -->
+<div id="ina_late_reason_section" style="display:none;">
+    <label>INA Late Reason:</label>
+    <div>
+        <input type="radio" name="ina_late_reason" value="Ran out of time"> Ran out of time<br>
+        <input type="radio" name="ina_late_reason" value="Not on Previous day's list"> Not on Previous day's list<br>
+        <input type="radio" name="ina_late_reason" value="Late from previous day"> Late from previous day<br>
+        <input type="radio" name="ina_late_reason" value="Transferred to ICU"> Transferred to ICU<br>
+        <input type="radio" name="ina_late_reason" value="Other"> Other
+    </div><br>
+</div>
+
+<!-- 10. INA Reason Other -->
+<div id="ina_reason_other_section" style="display:none;">
+    <label for="ina_reason_other">INA Reason Other:</label>
+    <input type="text" id="ina_reason_other" name="ina_reason_other"><br>
+</div>
+
+<!-- 11. INA Days Late -->
+<div id="ina_days_late_section" style="display:none;">
+    <label for="ina_days_late">INA Days Late:</label>
+    <input type="text" id="ina_days_late" name="ina_days_late"><br>
+</div>
+
+<!-- 12. RA Timeliness -->
+<div id="ra_timeliness_section" style="display:none;">
+    <label>RA Timeliness:</label>
+    <div>
+        <input type="radio" name="ra_timeliness" value="Yes"> Yes<br>
+        <input type="radio" name="ra_timeliness" value="No"> No
+    </div><br>
+</div>
+
+<!-- 13. RA Late Reason -->
+<div id="ra_late_reason_section" style="display:none;">
+    <label>RA Late Reason:</label>
+    <div>
+        <input type="radio" name="ra_late_reason" value="Ran out of time"> Ran out of time<br>
+        <input type="radio" name="ra_late_reason" value="Not on Previous day's list"> Not on Previous day's list<br>
+        <input type="radio" name="ra_late_reason" value="Late from previous day"> Late from previous day<br>
+        <input type="radio" name="ra_late_reason" value="Transferred to ICU"> Transferred to ICU<br>
+        <input type="radio" name="ra_late_reason" value="Other"> Other
+    </div><br>
+</div>
+
+<!-- 14. RA Reason Other -->
+<div id="ra_reason_other_section" style="display:none;">
+    <label for="ra_reason_other">RA Reason Other:</label>
+    <input type="text" id="ra_reason_other" name="ra_reason_other"><br>
+</div>
+
+
+
+    </form>
+</body>
+</html>

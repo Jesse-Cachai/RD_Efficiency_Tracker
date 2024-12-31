@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RD Visit Summary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='survey.js') }}" defer></script>
+<style>
+    /* General Page Styles */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: flex-start; /* Align content at the top */
+        min-height: 100vh; /* Ensure full viewport height */
+        background-color: #f9f9f9; /* Light background for clarity */
+    }
+
+    /* Title Styling */
+    .survey-title {
+        text-align: center; /* Center the text itself */
+        width: 100%; /* Ensure it spans the full width */
+        margin-top: 15px; /* Space from the top of the page */
+        margin-bottom: 20px; /* Space between title and form */
+        font-size: 2.2em; /* Make the title slightly larger */
+        font-weight: bold;
+        color: #57068C; /* NYU Langone Purple */
+    }
+
+/* Center Everything with a Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Align vertically */
+    width: 100%;
+    max-width: 650px; /* Fixed width for consistency */
+    margin: 50px auto 0 auto; /* Add space from the top */
+    padding: 0 20px; /* Prevent overflow on smaller screens */
+    box-sizing: border-box;
+}
+
+    h1 {
+        text-align: center;
+        margin-top: 20px; /* Add space above the title */
+        margin-bottom: 30px; /* Add space below the title */
+        font-size: 2em;
+        color: #57068C; /* NYU Langone Purple */
+    }
+
+    /* Center the Form on the Page */
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center-align fields horizontally */
+        justify-content: center; /* Vertically align content in the form */
+        width: 100%;
+        max-width: 600px; /* Prevent overly wide forms on large screens */
+        margin: 50px auto 0 auto; /* Space below the title and center horizontally */
+        background: white;
+        padding: 1px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+    }
+
+    /* Style Each Field */
+    .form-field {
+        width: 580px; /* Fixed width for all fields */
+        margin: 10px 0; /* Spacing between fields */
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #FAFAFA; /* Subtle background for clarity */
+        text-align: left; /* Keep content left-aligned */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    /* Ensure Labels Align Properly */
+    .form-field label {
+        display: inline-flex;
+        align-items: center; /* Aligns items vertically in the label */
+        gap: 5px; /* Space between radio/checkbox and label text */
+    }
+
+    .form-field input[type="text"],
+    .form-field input[type="date"],
+    .form-field select,
+    .form-field textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 1em;
+        box-sizing: border-box; /* Ensure padding doesn't overflow */
+    }
+
+    .form-field input[type="radio"],
+    .form-field input[type="checkbox"] {
+        margin-left: auto; /* Push to the far right */
+        margin-right: 5px; /* Adds a little space between the button and text */
+        position: relative;
+        top: 25px; /* Fine-tune alignment if needed */
+        left: 5px; /* Fine-tune alignment if needed */
+    }
+
+    .form-field legend {
+        font-size: 1em;
+        font-weight: bold;
+        color: #57068C; /* NYU Langone Purple */
+        margin-bottom: 10px;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 15px;
+        width: 200px;
+        font-weight: bold;
+        text-align: center;
+        background-color: #57068C; /* NYU Langone Purple */
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .btn-submit:hover {
+        background-color: #44056C; /* Slightly darker purple on hover */
+    }
+
+    /* Error & Success Messages */
+    .form-message {
+        margin-top: 15px;
+        font-size: 1em;
+        text-align: center;
+    }
+
+    .error-message {
+        color: #D32F2F; /* Red for error messages */
+    }
+
+    .success-message {
+        color: #388E3C; /* Green for success messages */
+    }
+    /* Style for Required Field Indicator */
+    .required-indicator {
+        color: red;
+        font-weight: bold;
+        margin-left: 4px;
+    }
+</style>
+
+
+</head>
+<body>
+    <div class="container">
+    <h1 class="survey-title">Registered Dietitian Visit Record</h1>
+    <form id="rd_productivity_form" action="/submit" method="post">
+
+        <!-- 1. RD Name -->
+        <div class="form-field">
+        <label for="rd_name">RD Name:</label>
+        <input type="text" id="rd_name" name="rd_name" required><br>
+        </div>
+
+        <!-- 2. Date Seen -->
+        <div class="form-field">
+        <label for="date_seen">Date Seen:</label>
+        <input type="date" id="date_seen" name="date_seen" required><br>
+        </div>
+
+        <!-- 3. MRN Patient -->
+        <div class="form-field">
+        <label for="mrn_patient">MRN Patient:</label>
+        <input type="text" id="mrn_patient" name="mrn_patient" pattern="[0-9]*" required><br>
+        </div>
+
+        <!-- 4. Reason for Visit -->
+        <div class="form-field">
+        <label>Reason for Visit:</label>
+        <div>
+            <input type="radio" name="reason_for_visit" value="Initial assessment" required> Initial Assessment<br>
+            <input type="radio" name="reason_for_visit" value="Reassessment"> Reassessment<br>
+            <input type="radio" name="reason_for_visit" value="Calorie count (non-consult)"> Calorie Count (non-consult)<br>
+            <input type="radio" name="reason_for_visit" value="Meal plan"> Meal Plan<br>
+            <input type="radio" name="reason_for_visit" value="Brief note"> Brief Note<br>
+            <input type="radio" name="reason_for_visit" value="Daily PN note (non-consult)"> Daily PN Note (non-consult)
+        </div><br>
+        </div>
+
+        <!-- Conditional Sections Start Here -->
+        
+<!-- 5. INA Reason -->
+<div id="ina_reason_section" style="display:none;">
+    <div class="form-field">
+    <label><strong>INA Reason:</strong></label>
+    <div>
+        <input type="radio" name="ina_reason" value="EN/PN (Not RN referral)"> EN/PN (Not RN referral)<br>
+        <input type="radio" name="ina_reason" value="ICU/Transplant"> ICU/Transplant<br>
+        <input type="radio" name="ina_reason" value="Length of Stay"> Length of Stay<br>
+        <input type="radio" name="ina_reason" value="Consult"> Consult<br>
+        <input type="radio" name="ina_reason" value="RN Referral"> RN Referral<br>
+        <input type="radio" name="ina_reason" value="Braden Score <=12"> Braden Score <=12
+    </div><br>
+</div>
+</div>
+
+<!-- 6. RA Reason -->
+<div id="ra_reason_section" style="display:none;">
+    <div class="form-field">
+    <label><strong>RA Reason:</strong></label>
+    <div>
+        <input type="radio" name="ra_reason" value="Due date"> Due date<br>
+        <input type="radio" name="ra_reason" value="Consult"> Consult<br>
+        <input type="radio" name="ra_reason" value="RN Referral"> RN Referral<br>
+        <input type="radio" name="ra_reason" value="Calorie Count (non-consult)"> Calorie Count (non-consult)
+    </div><br>
+</div>
+</div>
+
+<!-- 7. Outcome Risk (Indented & Conditional) -->
+<div id="outcome_risk_section" style="display:none;">
+    <div class="form-field">
+    <label>Outcome Risk:</label>
+    <div>
+        <input type="radio" name="outcome_risk" value="Low Risk"> Low Risk<br>
+        <input type="radio" name="outcome_risk" value="Medium Risk"> Medium Risk<br>
+        <input type="radio" name="outcome_risk" value="High Risk"> High Risk<br>
+        <input type="radio" name="outcome_risk" value="Hospice"> Hospice
+    </div><br>
+</div>
+</div>
+
+<!-- Field 8: INA Timeliness -->
+<div id="ina_timeliness_section" style="display:none;">
+    <div class="form-field">
+    <label>INA Timeliness:</label>
+    <div>
+        <input type="radio" name="ina_timeliness" value="Yes"> Yes<br>
+        <input type="radio" name="ina_timeliness" value="No"> No
+    </div><br>
+</div>
+</div>
+
+<!-- 9. INA Late Reason (Conditional) -->
+<div id="ina_late_reason_section" style="display:none;">
+    <div class="form-field">
+    <label>INA Late Reason:</label>
+    <div>
+        <input type="radio" name="ina_late_reason" value="Ran out of time"> Ran out of time<br>
+        <input type="radio" name="ina_late_reason" value="Not on Previous day's list"> Not on Previous day's list<br>
+        <input type="radio" name="ina_late_reason" value="Late from previous day"> Late from previous day<br>
+        <input type="radio" name="ina_late_reason" value="Transferred to ICU"> Transferred to ICU<br>
+        <input type="radio" name="ina_late_reason" value="Other"> Other
+    </div><br>
+</div>
+</div>
+
+<!-- 10. INA Reason Other -->
+<div id="ina_reason_other_section" style="display:none;">
+    <div class="form-field">
+    <label for="ina_reason_other">INA Reason Other:</label>
+    <input type="text" id="ina_reason_other" name="ina_reason_other"><br>
+</div>
+</div>
+
+<!-- 11. INA Days Late -->
+<div id="ina_days_late_section" style="display:none;">
+    <div class="form-field">
+    <label for="ina_days_late">INA Days Late:</label>
+    <input type="text" id="ina_days_late" name="ina_days_late"><br>
+</div>
+</div>
+
+<!-- Field 12: RA Timeliness -->
+<div id="ra_timeliness_section" style="display:none;">
+    <div class="form-field">
+    <label>RA Timeliness:</label>
+    <div>
+        <input type="radio" name="ra_timeliness" value="Yes"> Yes<br>
+        <input type="radio" name="ra_timeliness" value="No"> No
+    </div><br>
+</div>
+</div>
+
+<!-- 13. RA Late Reason -->
+<div id="ra_late_reason_section" style="display:none;">
+    <div class="form-field">
+    <label>RA Late Reason:</label>
+    <div>
+        <input type="radio" name="ra_late_reason" value="Ran out of time"> Ran out of time<br>
+        <input type="radio" name="ra_late_reason" value="Not on Previous day's list"> Not on Previous day's list<br>
+        <input type="radio" name="ra_late_reason" value="Late from previous day"> Late from previous day<br>
+        <input type="radio" name="ra_late_reason" value="Transferred to ICU"> Transferred to ICU<br>
+        <input type="radio" name="ra_late_reason" value="Other"> Other
+    </div><br>
+</div>
+</div>
+
+<!-- 14. RA Reason Other -->
+<div id="ra_reason_other_section" style="display:none;">
+    <div class="form-field">
+    <label for="ra_reason_other">RA Reason Other:</label>
+    <input type="text" id="ra_reason_other" name="ra_reason_other"><br>
+</div>
+</div>
+
+<!-- 15. RA Days Late -->
+<div id="ra_days_late_section" style="display:none;">
+    <div class="form-field">
+    <label for="ra_days_late"><strong>RA Days Late:</strong></label>
+    <input type="text" id="ra_days_late" name="ra_days_late" required>
+    <br>
+</div>
+</div>
+
+<!-- 16. Consult Reason -->
+<div id="consult_reason_section" style="display:none;">
+    <div class="form-field">
+    <label>Consult Reason:</label>
+    <div>
+        <input type="checkbox" name="consult_reason" value="Calorie Count"> Calorie Count<br>
+        <input type="checkbox" name="consult_reason" value="Education"> Education<br>
+        <input type="checkbox" name="consult_reason" value="Assessment"> Assessment<br>
+        <input type="checkbox" name="consult_reason" value="Parenteral Nutrition"> Parenteral Nutrition<br>
+        <input type="checkbox" name="consult_reason" value="Enteral Nutrition"> Enteral Nutrition<br>
+    </div><br>
+</div>
+</div>
+
+<!-- 17. Consult Timeliness -->
+<div id="consult_timeliness_section" style="display:none;">
+    <div class="form-field">
+    <label>Consult Timeliness:</label>
+    <div>
+        <input type="radio" name="consult_timeliness" value="Yes"> Yes<br>
+        <input type="radio" name="consult_timeliness" value="No"> No<br>
+    </div><br>
+</div>
+</div>
+
+<!-- 18. Consult Late Reason -->
+<div id="consult_late_reason_section" style="display:none;">
+    <div class="form-field">
+    <label>Consult Late Reason:</label>
+    <div>
+        <input type="radio" name="consult_late_reason" value="Ran out of time"> Ran out of time<br>
+        <input type="radio" name="consult_late_reason" value="Not on Previous day's list"> Not on Previous day's list<br>
+        <input type="radio" name="consult_late_reason" value="Late from previous day"> Late from previous day<br>
+        <input type="radio" name="consult_late_reason" value="Transferred to ICU"> Transferred to ICU<br>
+        <input type="radio" name="consult_late_reason" value="Other"> Other<br>
+    </div><br>
+</div>
+</div>
+
+<!-- 19. Consult Reason Other -->
+<div id="consult_reason_other_section" style="display:none;">
+    <div class="form-field">
+    <label for="consult_reason_other">Consult Reason Other:</label>
+    <input type="text" id="consult_reason_other" name="consult_reason_other" required>
+    <br>
+</div>
+</div>
+
+<!-- 20. Consult Days Late -->
+<div id="consult_days_late_section" style="display:none;">
+    <div class="form-field">
+    <label for="consult_days_late">Consult Days Late:</label>
+    <input type="text" id="consult_days_late" name="consult_days_late" required>
+    <br>
+</div>
+</div>
+
+<!-- 21. Education -->
+<div id="education_section" style="display:none;">
+    <div class="form-field">
+    <label>Education:</label>
+    <div>
+        <input type="checkbox" name="education" value="Coumadin"> Coumadin<br>
+        <input type="checkbox" name="education" value="Other"> Other<br>
+    </div><br>
+</div>
+</div>
+
+<!-- 22. Nutrition Support -->
+<div id="nutrition_support_section" style="display:none;">
+    <div class="form-field">
+    <label>Nutrition Support:</label>
+    <div>
+        <input type="checkbox" name="nutrition_support" value="Enteral Nutrition"> Enteral Nutrition<br>
+        <input type="checkbox" name="nutrition_support" value="Parenteral Nutrition"> Parenteral Nutrition<br>
+    </div><br>
+</div>
+</div>
+
+<!-- 23. Malnutrition -->
+<div id="malnutrition_section" style="display:none;">
+    <div class="form-field">
+    <label>Malnutrition:</label>
+    <div>
+        <input type="radio" name="malnutrition" value="Yes, by RD"> Yes, by RD<br>
+        <input type="radio" name="malnutrition" value="Yes, by MD"> Yes, by MD<br>
+        <input type="radio" name="malnutrition" value="No"> No<br>
+    </div><br>
+</div>
+</div>
+
+<!-- 24. Additional Info Optional -->
+<div id="additional_info_optional_section" style="">
+    <div class="form-field">
+    <label>Additional Information (Optional):</label>
+    <div>
+        <input type="checkbox" name="additional_info_optional" value="Calorie Count Included in Note"> Calorie Count Included in Note<br>
+        <input type="checkbox" name="additional_info_optional" value="Outpatient"> Outpatient<br>
+        <input type="checkbox" name="additional_info_optional" value="Intern Cosign"> Intern Cosign<br>
+        <input type="checkbox" name="additional_info_optional" value="Interpreter"> Interpreter<br>
+        <input type="checkbox" name="additional_info_optional" value="Transplant <= 1 year"> Transplant &le; 1 year<br>
+    </div><br>
+</div>
+</div>
+
+<!-- 25. Patient Care Time -->
+<div id="patient_care_time_section" style="">
+    <div class="form-field">
+    <label for="patient_care_time">Patient Care Time:</label>
+    <input type="text" id="patient_care_time" name="patient_care_time" required>
+    <br>
+</div>
+</div>
+
+<!-- 26. Formal Meeting Time -->
+<div id="formal_meeting_time_section" style="">
+    <div class="form-field">
+    <label for="formal_meeting_time">Formal Meeting Time:</label>
+    <input type="text" id="formal_meeting_time" name="formal_meeting_time">
+    <br>
+</div>
+</div>
+
+<!-- Submit Button -->
+<div style="margin-top: 20px;">
+    <button type="submit" class="btn-submit">Submit Survey</button>
+</div>
+
+    </form>
+    </div>
+</body>
+</html>

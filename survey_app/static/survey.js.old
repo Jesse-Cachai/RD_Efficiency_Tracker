@@ -1,0 +1,24 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const reasonForVisitRadios = document.getElementsByName('reason_for_visit');
+    const inaSection = document.getElementById('ina_reason_section');
+    const raSection = document.getElementById('ra_reason_section');
+
+    reasonForVisitRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'Initial assessment') {
+                inaSection.style.display = 'block';
+                raSection.style.display = 'none';
+            } else if (this.value === 'Reassessment') {
+                raSection.style.display = 'block';
+                inaSection.style.display = 'none';
+            } else {
+                inaSection.style.display = 'none';
+                raSection.style.display = 'none';
+            }
+        });
+    });
+
+    // Auto-populate today's date
+    const dateSeenInput = document.getElementById('date_seen');
+    dateSeenInput.value = new Date().toISOString().split('T')[0];
+});
