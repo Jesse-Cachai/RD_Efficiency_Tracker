@@ -30,7 +30,7 @@ services:
       - survey_net
       - db_net
     ports:
-      - "5000:5000"
+      - "5002:5000"
 
   csv_export:
     build: ./csv_export
