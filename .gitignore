@@ -1,0 +1,5 @@
+# Ignore all contents of the volumes directory
+volumes/*
+
+# But allow an empty placeholder file to ensure the directory exists in the repo
+!volumes/.gitkeep
