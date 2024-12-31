@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # Database configuration
-DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://survey_user:survey_pass@db/survey_db')
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://survey_user:byLKPwMrfG48xVT71YCK@db/survey_db')
 
 # Connect to the database
 def get_db_connection():

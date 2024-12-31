@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Database configuration from environment variables
-DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://survey_user:@db/survey_db')
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://survey_user:byLKPwMrfG48xVT71YCK@db/survey_db')
 
 def get_db_connection():
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
